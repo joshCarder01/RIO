@@ -1,0 +1,10 @@
+dawd    add b11 r1
+        add r3 #4 x1
+        br  pnz dawd
+        jmp bingus
+
+dingus  fill x4
+        
+        END
+;bingus  BLKW xA
+lingus  STRZ apple
