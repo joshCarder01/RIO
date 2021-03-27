@@ -22,27 +22,45 @@ class Command:
 commands = {
     
     # Debug
-    'prt' :Command(cmd_str = 'prt',  cmd_b = 0x01, flg_f = ['0','flag:i','flag:c','RF1'], arg_f = ['f','f','DATA']),
+    'prt' :Command(cmd_str = 'prt',  cmd_b = 0x01, flg_f = ['0','flag:i','flag:c','RF1'], arg_f = ['f','f','DATA1']),
     
     # Logic
-    'and' :Command(cmd_str = 'and',  cmd_b = 0x10, flg_f = ['0','DR','RF1','RF2'], arg_f = ['DR','DATA','DATA']),
-    'not' :Command(cmd_str = 'not',  cmd_b = 0x11, flg_f = ['0','DR','RF1','0'],   arg_f = ['DR','DATA']),
-    'or'  :Command(cmd_str = 'or',   cmd_b = 0x12, flg_f = ['0','DR','RF1','RF2'], arg_f = ['DR','DATA','DATA']),
-    'bsl' :Command(cmd_str = 'bsl',  cmd_b = 0x13, flg_f = ['0','DR','RF1','RF2'], arg_f = ['DR','DATA','DATA']),
-    'bsr' :Command(cmd_str = 'bsr',  cmd_b = 0x14, flg_f = ['0','DR','RF1','RF2'], arg_f = ['DR','DATA','DATA']),
-    'xor' :Command(cmd_str = 'xor',  cmd_b = 0x15, flg_f = ['0','DR','RF1','RF2'], arg_f = ['DR','DATA','DATA']),
+    'and' :Command(cmd_str = 'and',  cmd_b = 0x10, flg_f = ['0','DR','RF1','RF2'], arg_f = ['DR','DATA1','DATA2']),
+    'not' :Command(cmd_str = 'not',  cmd_b = 0x11, flg_f = ['0','DR','RF1','0'],   arg_f = ['DR','DATA1']),
+    'or'  :Command(cmd_str = 'or',   cmd_b = 0x12, flg_f = ['0','DR','RF1','RF2'], arg_f = ['DR','DATA1','DATA2']),
+    'bsl' :Command(cmd_str = 'bsl',  cmd_b = 0x13, flg_f = ['0','DR','RF1','RF2'], arg_f = ['DR','DATA1','DATA2']),
+    'bsr' :Command(cmd_str = 'bsr',  cmd_b = 0x14, flg_f = ['0','DR','RF1','RF2'], arg_f = ['DR','DATA1','DATA2']),
+    'xor' :Command(cmd_str = 'xor',  cmd_b = 0x15, flg_f = ['0','DR','RF1','RF2'], arg_f = ['DR','DATA1','DATA2']),
 
     # Math
-    'add' :Command(cmd_str = 'add',  cmd_b = 0x20, flg_f = ['0','DR','RF1','RF2'], arg_f = ['DR','DATA','DATA']),
-    'sub' :Command(cmd_str = 'sub',  cmd_b = 0x21, flg_f = ['0','DR','RF1','RF2'], arg_f = ['DR','DATA','DATA']),
-    'mul' :Command(cmd_str = 'mul',  cmd_b = 0x22, flg_f = ['0','DR','RF1','RF2'], arg_f = ['DR','DATA','DATA']),
-    'div' :Command(cmd_str = 'div',  cmd_b = 0x23, flg_f = ['0','DR','RF1','RF2'], arg_f = ['DR','DATA','DATA']),
-    'mod' :Command(cmd_str = 'mod',  cmd_b = 0x24, flg_f = ['0','DR','RF1','RF2'], arg_f = ['DR','DATA','DATA']),
+    'add' :Command(cmd_str = 'add',  cmd_b = 0x20, flg_f = ['0','DR','RF1','RF2'], arg_f = ['DR','DATA1','DATA2']),
+    'sub' :Command(cmd_str = 'sub',  cmd_b = 0x21, flg_f = ['0','DR','RF1','RF2'], arg_f = ['DR','DATA1','DATA2']),
+    'mul' :Command(cmd_str = 'mul',  cmd_b = 0x22, flg_f = ['0','DR','RF1','RF2'], arg_f = ['DR','DATA1','DATA2']),
+    'div' :Command(cmd_str = 'div',  cmd_b = 0x23, flg_f = ['0','DR','RF1','RF2'], arg_f = ['DR','DATA1','DATA2']),
+    'mod' :Command(cmd_str = 'mod',  cmd_b = 0x24, flg_f = ['0','DR','RF1','RF2'], arg_f = ['DR','DATA1','DATA2']),
 
     # Branch
     'br'  :Command(cmd_str = 'br',   cmd_b = 0x30, flg_f = ['0','flag:p','flag:n','flag:z'], arg_f = ['f','f','f','AD']),
-    'jmp' :Command(cmd_str = 'jmp',  cmd_b = 0x31, flg_f = ['0','0','0','SR'], arg_f = ['f','f','f','AD']),
+    'jmp' :Command(cmd_str = 'jmp',  cmd_b = 0x31, flg_f = ['0','SR','0','0'], arg_f = ['SR']),
+    'ret' :Command(cmd_str = 'ret',  cmd_b = 0x31, flg_f = ['0','1','0','0'], reg_b = 7),
+    'jsr' :Command(cmd_str = 'jsr',  cmd_b = 0x32, flg_f = ['1','0','0','0'], arg_f = ['AD']),
+    'jsrr':Command(cmd_str = 'jsrr', cmd_b = 0x32, flg_f = ['0','SR','0','0'], arg_f = ['SR']),
+    'end' :Command(cmd_str = 'end',  cmd_b = 0x33, flg_f = ['0','SR','0','0'], arg_f = ['SR']),
     
+    # Load/Store
+    'ld'  :Command(cmd_str = 'ld',   cmd_b = 0x40, flg_f = ['0','DR','0','0'], arg_f = ['DR','AD']),
+    'ldi' :Command(cmd_str = 'ldi',  cmd_b = 0x41, flg_f = ['0','DR','0','0'], arg_f = ['DR','AD']),
+    'ldr' :Command(cmd_str = 'ldr',  cmd_b = 0x42, flg_f = ['0','DR','RF1','RF2'], arg_f = ['DR','DATA1','DATA2']),
+    'lea' :Command(cmd_str = 'lea',  cmd_b = 0x43, flg_f = ['0','DR','0','0'], arg_f = ['DR','AD']),
+    'st'  :Command(cmd_str = 'st',   cmd_b = 0x44, flg_f = ['0','SR','0','0'], arg_f = ['SR','AD']),
+    'sti' :Command(cmd_str = 'sti',  cmd_b = 0x45, flg_f = ['0','SR','0','0'], arg_f = ['SR','AD']),
+    'str' :Command(cmd_str = 'str',  cmd_b = 0x46, flg_f = ['0','SR','RF1','RF2'], arg_f = ['SR','DATA1','DATA2']),
+    #'fill':Command(cmd_str = 'fill', cmd_b = 0x47, flg_f = ['0','SR','RF1','RF2'], arg_f = ['SR','DATA1','DATA2']),
+
+    # IO
+    'sbr' :Command(cmd_str = 'sbr',  cmd_b = 0x50, flg_f = ['0','DR','RF1','0'], arg_f = ['DR','DATA1']),
+    'sbw' :Command(cmd_str = 'sbw',  cmd_b = 0x51, flg_f = ['0','SR','RF1','0'], arg_f = ['SR','DATA1']),    
+
 
 }
 
@@ -133,4 +151,4 @@ def to_token_list(filename):
     return (return_list, data_list, end_index)
 
 
-print(to_token_list("test.rio"))
+print(to_token_list("RIOlang\\test.rio"))
