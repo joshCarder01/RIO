@@ -22,7 +22,7 @@ class Command:
 commands = {
     
     # Debug
-    'prt' :Command(cmd_str = 'prt',  cmd_b = 0x01, flg_f = ['0','flag:i','flag:c','RF1'], arg_f = ['f','f','DATA1']),
+    'prt' :Command(cmd_str = 'prt',  cmd_b = 0x01, flg_f = ['0','flag:i','flag:c','RF1'], arg_f = ['f','DATA1']),
     
     # Logic
     'and' :Command(cmd_str = 'and',  cmd_b = 0x10, flg_f = ['0','DR','RF1','RF2'], arg_f = ['DR','DATA1','DATA2']),
@@ -40,7 +40,7 @@ commands = {
     'mod' :Command(cmd_str = 'mod',  cmd_b = 0x24, flg_f = ['0','DR','RF1','RF2'], arg_f = ['DR','DATA1','DATA2']),
 
     # Branch
-    'br'  :Command(cmd_str = 'br',   cmd_b = 0x30, flg_f = ['0','flag:p','flag:n','flag:z'], arg_f = ['f','f','f','AD']),
+    'br'  :Command(cmd_str = 'br',   cmd_b = 0x30, flg_f = ['0','flag:p','flag:n','flag:z'], arg_f = ['f','AD']),
     'jmp' :Command(cmd_str = 'jmp',  cmd_b = 0x31, flg_f = ['0','SR','0','0'], arg_f = ['SR']),
     'ret' :Command(cmd_str = 'ret',  cmd_b = 0x31, flg_f = ['0','1','0','0'], reg_b = 7),
     'jsr' :Command(cmd_str = 'jsr',  cmd_b = 0x32, flg_f = ['1','0','0','0'], arg_f = ['AD']),
