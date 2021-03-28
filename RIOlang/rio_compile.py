@@ -55,7 +55,7 @@ commands = {
     'st'  :Command(cmd_str = 'st',   cmd_b = 0x44, flg_f = ['0','SR','0','0'], arg_f = ['SR','AD']),
     'sti' :Command(cmd_str = 'sti',  cmd_b = 0x45, flg_f = ['0','SR','0','0'], arg_f = ['SR','AD']),
     'str' :Command(cmd_str = 'str',  cmd_b = 0x46, flg_f = ['0','SR','RF1','RF2'], arg_f = ['SR','DATA1','DATA2']),
-    #'fill':Command(cmd_str = 'fill', cmd_b = 0x47, flg_f = ['0','SR','RF1','RF2'], arg_f = ['SR','DATA1','DATA2']),
+    #'fill':None,#Command(cmd_str = 'fill', cmd_b = 0x47, flg_f = ['0','SR','RF1','RF2'], arg_f = ['SR','DATA1','DATA2']),
 
     # IO
     'sbr' :Command(cmd_str = 'sbr',  cmd_b = 0x50, flg_f = ['0','DR','RF1','0'], arg_f = ['DR','DATA1']),
@@ -107,6 +107,8 @@ def num_to_int(str_num):
 def to_token_list(filename):
     return_list = []
     data_list = []
+    data_bytes = None
+    label_dict = {}
 
     found_end = False
     end_index = 0
@@ -144,11 +146,18 @@ def to_token_list(filename):
             data_list[line_number][line.index('strz') + 1] = '#' + str(ord(line[line.index('strz') + 1][0]))
             data_list[line_number][line.index('strz')] = 'fill'
 
-        print(line_number, line)
+    for line_number, line in enumerate(return_list):
+        if line[0] not in commands:
+            label_dict[line[0]] = line_number * 2
 
+    for line_number, line in enumerate(data_list):
+        if line[0] != 'fill':
+            label_dict[line[0]] = line_number + (end_index * 2)
+
+    print(label_dict)
 
 
     return (return_list, data_list, end_index)
 
 
-print(to_token_list("RIOlang\\test.rio"))
+print(to_token_list("RIOlang/test.rio"))

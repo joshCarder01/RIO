@@ -3,6 +3,8 @@ dawd    add b11 r1
         br  pnz dawd
         jmp bingus
 
+fawd    not
+
 dingus  fill x4
         
         END
