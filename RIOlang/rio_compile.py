@@ -88,6 +88,9 @@ def is_valid_reg(reg_string, max_registers = 8):
     except:
         return False
 
+def is_valid_num(num_string):
+    return is_valid_hex(num_string) or is_valid_dec(num_string) or is_valid_bin(num_string)
+
 def num_to_int(str_num):
     if isinstance(str_num, str):
         if is_valid_hex(str_num):
@@ -138,7 +141,7 @@ def to_token_list(filename):
             data_list += [cmd_list.pop()]
 
     if not found_end:
-        return "ERROR:no end found"
+        return ("ERROR:no end found",0,0)
 
     # convert all larger blocks to fills
     for line_number, line in enumerate(data_list):
@@ -174,9 +177,87 @@ def to_token_list(filename):
 
     return (cmd_list, label_dict, data_bytes)
 
-def compile(filename):
+def to_bytes(token_list, label_dict):
+    return_bytes = bytearray()
+    command_obj = None
 
+    # Errror if there is still no command
+    if token_list[0] not in commands:
+        return "ERROR: command not found"
+    else:
+        command_obj = commands[token_list[0]]
+
+
+    return_bytes.append(command_obj.cmd_b)
+
+    # setup min and max number of expected args
+    max_args = len(token_list[1:])
+    min_args = 0
+    for arg in command_arg_f[1:]:
+        if arg != 'DR' or arg != 'f':
+            min_args += 1
+
+    if len(token_list[1:]) < min_args or len(token_list[1:]) > max_args:
+        return "ERROR: bad number of args"
+
+    if len(token_list[1:]) == min_args:
+        command_obj.arg_f.remove('DR')
+        command_obj.arg_f.remove('f')
+
+    # if there is data for flg_b, use it
+    if not command_obj.flg_b == None:
+        return_bytes.append(command_obj.flg_b)
+    else:
+        '''
+        args in = [#3,#3]
+        args ex = [DR,n ,n ]
+        flags   = [DR,rf,rf]
+        '''
+        flag_bytes = 0
+        payload_bytes = 0
+        for arg_number, arg in command_obj.arg_f:
+            
+            if arg == 'DR' and is_valid_reg(token_list[arg_number]):
+                flag_bytes += (1 << 4 - command_obj.flag_f.index('DR') - 1)
+            elif arg == 'DR':
+                return 'ERROR: expected register'
+
+            elif arg == 'SR' and is_valid_reg(token_list[arg_number]):
+                flag_bytes += (1 << 4 - command_obj.flag_f.index('SR') - 1)
+            elif arg == 'SR':
+                return 'ERROR: expected register'
+
+            elif arg == 'DATA1' and is_valid_reg(token_list[arg_number]):
+                flag_bytes += (1 << 4 - command_obj.flag_f.index('RF1') - 1)
+                payload_bytes += (num_to_int(token_list[arg_number]) << 4)
+            elif arg == 'DATA1' and is_valid_num(token_list[arg_number]):
+                payload_bytes += (num_to_int(token_list[arg_number]) << 4)
+            elif arg == 'DATA1':
+                return 'ERROR: expected register or num'
+
+            elif arg == 'DATA2' and is_valid_reg(token_list[arg_number]):
+                flag_bytes += (1 << 4 - command_obj.flag_f.index('RF2') - 1)
+                payload_bytes += (num_to_int(token_list[arg_number]))
+            elif arg == 'DATA2' and is_valid_num(token_list[arg_number]):
+                payload_bytes += (num_to_int(token_list[arg_number]))
+            elif arg == 'DATA2':
+                return 'ERROR: expected register or num'
+
+            elif arg == 'AD' and token_list[arg_number] in label_dict:
+                payload_bytes += label_dict[token_list[arg_number]]
+            elif arg == 'AD':
+                return 'ERROR: expected address'
+
+            elif 'flag:' in arg and arg[-1] in token_list[arg_number]:
+                flag_bytes += (1 << 4 - command_obj.flag_f.index(arg) - 1)
+                
+
+def compile(filename):
+    cmd_bytes = bytearray()
     cmd_list, label_dict, data_bytes = to_token_list(filename)
+    if "ERROR" in cmd_list:
+        print(cmd_list)
+        return 
     print(cmd_list)
     print()
     print(label_dict)
