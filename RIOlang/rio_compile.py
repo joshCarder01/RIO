@@ -103,11 +103,19 @@ def num_to_int(str_num):
     else:
         return False
 
+def print_bytes(bytea, split = 4):
+    for n, b in enumerate(bytea):
+        print("{0:08b}".format(b), end = ' ')
+        if (n + 1) % split == 0:
+            print()
+        
+        
+
 
 def to_token_list(filename):
-    return_list = []
+    cmd_list = []
     data_list = []
-    data_bytes = None
+    data_bytes = bytearray()
     label_dict = {}
 
     found_end = False
@@ -117,17 +125,17 @@ def to_token_list(filename):
     for line in file_handle:
 
         # get items
-        return_list += [line.replace(',', ' ').lower().strip().split(";")[0].split()]
+        cmd_list += [line.replace(',', ' ').lower().strip().split(";")[0].split()]
         # disregard if empty line
-        if not return_list[-1]:
-            return_list.pop()
+        if not cmd_list[-1]:
+            cmd_list.pop()
         # find the end
-        if 'end' in return_list[-1]:
+        if 'end' in cmd_list[-1]:
             found_end = True
-            end_index = len(return_list)
+            end_index = len(cmd_list)
         # gather all hardcoded value saving
-        if 'fill' in return_list[-1] or 'blkw' in return_list[-1] or 'strz' in return_list[-1]:
-            data_list += [return_list.pop()]
+        if 'fill' in cmd_list[-1] or 'blkw' in cmd_list[-1] or 'strz' in cmd_list[-1]:
+            data_list += [cmd_list.pop()]
 
     if not found_end:
         return "ERROR:no end found"
@@ -146,18 +154,34 @@ def to_token_list(filename):
             data_list[line_number][line.index('strz') + 1] = '#' + str(ord(line[line.index('strz') + 1][0]))
             data_list[line_number][line.index('strz')] = 'fill'
 
-    for line_number, line in enumerate(return_list):
+    for line_number, line in enumerate(cmd_list):
         if line[0] not in commands:
             label_dict[line[0]] = line_number * 2
+            cmd_list[line_number] = cmd_list[line_number][1:]
 
     for line_number, line in enumerate(data_list):
         if line[0] != 'fill':
             label_dict[line[0]] = line_number + (end_index * 2)
+            data_list[line_number] = data_list[line_number][1:]
 
+    for line in data_list:
+        data_bytes.append(num_to_int(line[-1]))
+
+    #print_bytes(data_bytes, split=2)
+
+    #print(label_dict)
+
+
+    return (cmd_list, label_dict, data_bytes)
+
+def compile(filename):
+
+    cmd_list, label_dict, data_bytes = to_token_list(filename)
+    print(cmd_list)
+    print()
     print(label_dict)
+    print()
+    print_bytes(data_bytes, split=2)
 
 
-    return (return_list, data_list, end_index)
-
-
-print(to_token_list("RIOlang/test.rio"))
+compile("RIOlang/test.rio")
