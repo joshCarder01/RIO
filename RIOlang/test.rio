@@ -1,4 +1,5 @@
 dawd    add b11 r1
+thingus
         add r3 #4 x1
         br  pnz dawd
         jmp bingus
@@ -6,7 +7,7 @@ dawd    add b11 r1
 fawd    not
 
 dingus  fill x4
-        
+flingus
         END
 ;bingus  BLKW xA
 lingus  STRZ apple

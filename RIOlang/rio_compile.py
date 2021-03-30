@@ -157,16 +157,29 @@ def to_token_list(filename):
             data_list[line_number][line.index('strz') + 1] = '#' + str(ord(line[line.index('strz') + 1][0]))
             data_list[line_number][line.index('strz')] = 'fill'
 
+    # handle labels that are not on a line with another command
+    to_remove = []
+    for line_number, line in enumerate(cmd_list):
+        if len(line) == 1 and line[0] not in commands:
+            to_remove += [line]
+            cmd_list[line_number + 1].insert(0, line[0])
+    for item in to_remove:
+        cmd_list.remove(item)
+        end_index -= 1
+
+    # get label placement in cmd_list 
     for line_number, line in enumerate(cmd_list):
         if line[0] not in commands:
             label_dict[line[0]] = line_number * 2
             cmd_list[line_number] = cmd_list[line_number][1:]
-
+    
+    # get label placement in data_list
     for line_number, line in enumerate(data_list):
         if line[0] != 'fill':
             label_dict[line[0]] = line_number + (end_index * 2)
             data_list[line_number] = data_list[line_number][1:]
 
+    # transform fill cmd into bytes
     for line in data_list:
         data_bytes.append(num_to_int(line[-1]))
 
