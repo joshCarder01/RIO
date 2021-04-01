@@ -206,7 +206,7 @@ def to_bytes(token_list, label_dict):
     # setup min and max number of expected args
     max_args = len(token_list[1:])
     min_args = 0
-    for arg in command_arg_f[1:]:
+    for arg in command_obj.arg_f[1:]:
         if arg != 'DR' or arg != 'f':
             min_args += 1
 
@@ -214,8 +214,15 @@ def to_bytes(token_list, label_dict):
         return "ERROR: bad number of args"
 
     if len(token_list[1:]) == min_args:
-        command_obj.arg_f.remove('DR')
-        command_obj.arg_f.remove('f')
+        try:
+            command_obj.arg_f.remove('DR')
+        except:
+            pass
+
+        try:
+            command_obj.arg_f.remove('f')
+        except:
+            pass
 
     # if there is data for flg_b, use it
     if not command_obj.flg_b == None:
@@ -227,18 +234,21 @@ def to_bytes(token_list, label_dict):
         flags   = [DR,rf,rf]
         '''
         flag_bytes = 0
+        reg_bytes = 0
         payload_bytes = 0
-        for arg_number, arg in command_obj.arg_f:
+        for arg_number, arg in enumerate(command_obj.arg_f):
             
             if arg == 'DR' and is_valid_reg(token_list[arg_number]):
                 flag_bytes += (1 << 4 - command_obj.flag_f.index('DR') - 1)
+                reg_bytes += num_to_int(token_list[arg_number])
             elif arg == 'DR':
-                return 'ERROR: expected register'
+                return str(arg_number) + ' | ERROR: expected register'
 
             elif arg == 'SR' and is_valid_reg(token_list[arg_number]):
                 flag_bytes += (1 << 4 - command_obj.flag_f.index('SR') - 1)
+                reg_bytes += num_to_int(token_list[arg_number])
             elif arg == 'SR':
-                return 'ERROR: expected register'
+                return str(arg_number) + ' | ERROR: expected register'
 
             elif arg == 'DATA1' and is_valid_reg(token_list[arg_number]):
                 flag_bytes += (1 << 4 - command_obj.flag_f.index('RF1') - 1)
@@ -246,7 +256,7 @@ def to_bytes(token_list, label_dict):
             elif arg == 'DATA1' and is_valid_num(token_list[arg_number]):
                 payload_bytes += (num_to_int(token_list[arg_number]) << 4)
             elif arg == 'DATA1':
-                return 'ERROR: expected register or num'
+                return str(arg_number) + ' | ERROR: expected register or num'
 
             elif arg == 'DATA2' and is_valid_reg(token_list[arg_number]):
                 flag_bytes += (1 << 4 - command_obj.flag_f.index('RF2') - 1)
@@ -254,16 +264,24 @@ def to_bytes(token_list, label_dict):
             elif arg == 'DATA2' and is_valid_num(token_list[arg_number]):
                 payload_bytes += (num_to_int(token_list[arg_number]))
             elif arg == 'DATA2':
-                return 'ERROR: expected register or num'
+                return str(arg_number) + ' | ERROR: expected register or num'
 
             elif arg == 'AD' and token_list[arg_number] in label_dict:
                 payload_bytes += label_dict[token_list[arg_number]]
             elif arg == 'AD':
-                return 'ERROR: expected address'
+                return str(arg_number) + ' | ERROR: expected address'
 
             elif 'flag:' in arg and arg[-1] in token_list[arg_number]:
                 flag_bytes += (1 << 4 - command_obj.flag_f.index(arg) - 1)
-                
+            elif 'flag:' in arg:
+                return str(arg_number) + ' | ERROR: invalid flag'
+
+    return_bytes.append((flag_bytes << 4) + reg_bytes)
+    return_bytes.append((payload_bytes >> 8))
+    return_bytes.append((payload_bytes ^ 65280))
+
+    print_bytes(return_bytes)
+        
 
 def compile(filename):
     cmd_bytes = bytearray()
@@ -275,6 +293,10 @@ def compile(filename):
     print()
     print(label_dict)
     print()
+    for line_number, line in enumerate(cmd_list):
+        return_code = to_bytes(line, label_dict)
+        if "ERROR" in return_code:
+            print(line_number, "|", return_code)
     print_bytes(data_bytes, split=2)
 
 
