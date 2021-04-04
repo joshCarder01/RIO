@@ -211,7 +211,7 @@ def to_bytes(token_list, label_dict):
             min_args += 1
 
     if len(token_list[1:]) < min_args or len(token_list[1:]) > max_args:
-        return "ERROR: bad number of args"
+        return "  | ERROR: bad number of args"
 
     if len(token_list[1:]) == min_args:
         try:
