@@ -57,11 +57,13 @@ for module_name in module_name_lst:
     except:
         print("Module '" + module_name + "' not found or broken")
 
-# construct objs
+# construct parts
 for key, item in local_group['parts'].items():
     part_dict[key] = class_dict[item['source_class']](item['start_state'])
 
-# Run objs
+# Run parts
 while True:
     for part_name, part in part_dict.items():
         part.step()
+
+        for connection_name, content in local_group['connections'].items():
