@@ -8,16 +8,6 @@ The initial version of this project will focus on a virtual microcontroller modu
 ![image](https://user-images.githubusercontent.com/61638976/113528054-758c7a00-958d-11eb-9e4f-4e50887cf7b7.png)
 1. Create an easy to use standard for developers to create class objects (modules) that can talk to each other, and the virtual environment in which the inhabbit (the outside world)
 2. Utilizing this standard, create a tool that will allow users pick the modules they want, and connect them how they wish, and run it in a virtual environment.
-### How is it done today, and what are the limits of current practice?
-### What is new in your approach and why do you think it will be successful?
-### Who cares? If you are successful, what difference will it make?
-### What are the risks?
-### ~~How much will it cost?~~
-### ~~How long will it take?~~
-*As long as it needs to take*
-### What are the mid-term and final “exams” to check for success?
-
-## What are 'Modules', how do they work together, what is the standard for development
 
 ## (To be developed) Included Module Descriptions
 ### RIOvmc
