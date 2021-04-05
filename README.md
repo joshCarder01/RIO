@@ -1,11 +1,13 @@
 # RIO
 *Registered Input Output*  
-Platform and standard for class object management and connectivity by creating a virtual environment, focused on both end-user expereince and standard modularity for developers.  
-The initial version of this will focus on a virtual microcontroller of sorts (the RIOvmc), along with other basic IO modules to test functionailty
+Platform and standard for class object management and connectivity by creating a virtual environment, focused on both end-user experience and standard modularity for developers.  
+The initial version of this project will focus on a virtual microcontroller module (the RIOvmc), other basic IO modules to test functionailty, and a sample environment to run it all in.
 
 ## Project Outline
 ### What are we trying to do?
 ![image](https://user-images.githubusercontent.com/61638976/113528054-758c7a00-958d-11eb-9e4f-4e50887cf7b7.png)
+1. Create an easy to use standard for developers to create class objects (modules) that can talk to each other, and the virtual environment in which the inhabbit (the outside world)
+2. Utilizing this standard, create a tool that will allow users pick the modules they want, and connect them how they wish, and run it in a virtual environment.
 ### How is it done today, and what are the limits of current practice?
 ### What is new in your approach and why do you think it will be successful?
 ### Who cares? If you are successful, what difference will it make?
