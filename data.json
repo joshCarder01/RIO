@@ -1,0 +1,1 @@
+{"parts": {"computer1": {"source_file": "part1", "source_class": "Computer", "start_state": "test"}, "computer2": {"source_file": "part1", "source_class": "Computer", "start_state": "test"}}, "connections": {"data": [[["computer1", 1], ["computer2", 1]]]}}
