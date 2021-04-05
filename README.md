@@ -1,13 +1,14 @@
 # RIO
-Platform for a Python based Virtual Microcontroller and Virtual Environment manager
+*Registered Input Output*  
+Platform and standard for class object management and connectivity, focused on both end-user expereince and standard modularity for developers. 
 
-## Overview
-![image](https://user-images.githubusercontent.com/61638976/112400398-b3141c00-8cde-11eb-8f58-a83194b803ad.png)
+## What are you trying to do? Articulate your objectives using absolutely no jargon.
+![image](https://user-images.githubusercontent.com/61638976/113528054-758c7a00-958d-11eb-9e4f-4e50887cf7b7.png)
 
-## Modules
-Any module built in python can work in this system, provided it follows the standard
-
-
-## RIOlang / RIObin
-'Language' run on VMs. Extended version of LC3 on the frontend, and a bastardization of anything holy on the backend
-
+## How is it done today, and what are the limits of current practice?
+## What is new in your approach and why do you think it will be successful?
+## Who cares? If you are successful, what difference will it make?
+## What are the risks?
+## -How much will it cost?-
+## How long will it take?
+## What are the mid-term and final “exams” to check for success?
