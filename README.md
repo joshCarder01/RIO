@@ -6,6 +6,8 @@ The initial version of this project will focus on a virtual microcontroller modu
 ## Project Outline
 ### What are we trying to do?
 ![image](https://user-images.githubusercontent.com/61638976/113643564-9669d380-9650-11eb-8db1-ce582a12ffdb.png)
+![image](https://user-images.githubusercontent.com/61638976/113643640-c2855480-9650-11eb-9bd0-5998eb72ea2b.png)
+
 
 1. Create an easy to use standard for developers to create class objects (modules) that can talk to each other, and the virtual environment in which the inhabbit (the outside world)
 2. Utilizing this standard, create a tool that will allow users pick the modules they want, and connect them how they wish, and run it in a virtual environment.
