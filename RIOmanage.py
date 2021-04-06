@@ -3,7 +3,7 @@ import inspect
 import json
 
 
-local_group = {
+construction = {
     'parts':{
         'seq':{
             'source_file':'basics',
@@ -22,11 +22,9 @@ local_group = {
         }
     },
 
-    'connections':{
-        'data':[
-            [['seq','freq'], ['beep','freq']]
-        ]
-    }
+    'connections':[
+        [{'device':'seq', 'port_name':'freq'},{'device':'beep', 'port_name':'freq'}]
+    ]
 }
 
 
@@ -44,7 +42,7 @@ class_dict = {}
 part_dict = {}
 
 # get the names of all the files needed to import
-for key, item in local_group['parts'].items():
+for key, item in construction['parts'].items():
     module_name_lst += ['Modules.'+item['source_file']]
 
 # import files
@@ -58,12 +56,17 @@ for module_name in module_name_lst:
         print("Module '" + module_name + "' not found or broken")
 
 # construct parts
-for key, item in local_group['parts'].items():
-    part_dict[key] = class_dict[item['source_class']](item['start_state'])
+for key, item in construction['parts'].items():
+    part_dict[key] = {
+        'class_obj':class_dict[item['source_class']](item['start_state']),
+        'connections':None
+    }
+    
 
 # Run parts
 while True:
     for part_name, part in part_dict.items():
-        part.step()
+        part['class_obj'].step()
 
-        for connection_name, content in local_group['connections'].items():
+        for connection_name, content in part['connections'].items():
+            pass
