@@ -23,7 +23,7 @@ construction = {
     },
 
     'connections':[
-        [{'device':'seq', 'port_name':'freq'},{'device':'beep', 'port_name':'freq'}]
+        [{'part':'seq', 'port':'freq'},{'part':'beep', 'port':'freq'}]
     ]
 }
 
