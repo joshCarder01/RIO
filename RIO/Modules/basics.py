@@ -24,6 +24,12 @@ class Sequencer:
             self.count += 1
         else:
             self.count = 0
+
+    def input(self, port, value):
+        self.input_data[port] = value
+
+    def output(self, port):
+        return self.output_data[port] 
         
 class Beeper:
 
@@ -45,3 +51,9 @@ class Beeper:
         
             
         winsound.Beep(int(440 * 2 ** (freq/12)), length)
+
+    def input(self, port, value):
+        self.input_data[port] = value
+
+    def output(self, port):
+        return self.output_data[port] 
